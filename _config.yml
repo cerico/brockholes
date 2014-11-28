@@ -10,3 +10,6 @@ github_username:  cerico
 
 # Build settings
 markdown: kramdown
+tags:
+- jekyll
+- code
