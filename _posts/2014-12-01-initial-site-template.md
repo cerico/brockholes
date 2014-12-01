@@ -26,16 +26,17 @@ Very simple log in page, just the ability to log in with any of 3 social media s
    
 Logging in then takes to the trail index page 
 
-<a href="http://salterhebble.com/s3/trailsindex.html"><img src="http://salterhebble.com/s3/st2.jpg"></a>
+<a href="http://salterhebble.com/s3/trailsindex.html"><img src="http://salterhebble.com/s3/st2.jpg">
 
-<a href="http://salterhebble.com/s3/trailsindex.html">http://salterhebble.com/s3/trailsindex.html</a>
+[http://salterhebble.com/s3/trailsindex.html](http://)
+
 
 This just shows us all the trails that are currently on the site, mainly a visual page, the pictures are really doing most of the work here! Clicking on any photo takes us to its individual page
 
 
- <a href="http://salterhebble.com/s3/trail.html"><img src="http://salterhebble.com/s3/st3.jpg"></a>
+<a href="http://salterhebble.com/s3/trail.html"><img src="http://salterhebble.com/s3/st3.jpg"></a>
  
- <a href="http://salterhebble.com/s3/trail.html">http://salterhebble.com/s3/trail.html</a>
+[http://salterhebble.com/s3/trail.html](http://)
  
  Here the black sidebar pops out a bit with various bits of information. In the sidebar we have the distance of the trail (which will come from gpx import), the ave rating from each user and its ranking. We can also see how many users have completed the trail, and also how many have favourited it. Moving over to the main content box, we can see which user added this hike to the site, and we have the ability to favourite this trail ourselves, and also mark it as completed. Then we have the map, which will have the route marked out via gpx. Then we have some additional photos, and an area for users to upload their own photos to the trail
  
@@ -43,7 +44,7 @@ If we then click on the photo of the user who uploaded the trail, we'll see thei
 
 <a href="http://salterhebble.com/s3/profile.html"><img src="http://salterhebble.com/s3/st3.jpg"></a>
 
-<a href="http://salterhebble.com/s3/profile.html">http://salterhebble.com/s3/profile.html </a>
+[http://salterhebble.com/s3/profile.html](http://)
 
 Similar to the individual trail page, the sidebar stays out with similar information. How many trails this user has added, how many they have completed. If we are this user, we can also see how many we have favourited, clicking on each of these will switch the main content box between added, completed and favourited. At the moment i've done this with a little bit of jquery, but may switch to angular when we get to that point.
 
@@ -80,7 +81,7 @@ Next we have the 'add new trail' page, here
 
 <a href="http://salterhebble.com/s3/newtrail.html"><img src="http://salterhebble.com/s3/st4.jpg"></a>
 
-<a href="http://salterhebble.com/s3/newtrail.html">http://salterhebble.com/s3/newtrail.html</a>
+[http://salterhebble.com/s3/newtrail.html](http://)
 
 Here a user will be able to upload a new trail to the site, giving it a name, county and rating, and adding any photos before submitting. At least 1 one photo will have to be submitted or it will mess up the front page, and also who wants to look at a trail with no photos? They should also be able to click on the map to pinpoint its location (and later we'll also add the ability to import gpx data). Also we can see the sidebar pops back in as no longer used.
 
