@@ -76,7 +76,7 @@ Similar to the individual trail page, the sidebar stays out with similar informa
     
 Next we have the 'add new trail' page, here
 
-<a href=""http://salterhebble.com/s3/newtrail.html"><img src="http://salterhebble.com/s3/st4.jpg">
+<a href="http://salterhebble.com/s3/newtrail.html"><img src="http://salterhebble.com/s3/st4.jpg">
 
 http://salterhebble.com/s3/newtrail.html</a>
 
