@@ -42,7 +42,7 @@ This just shows us all the trails that are currently on the site, mainly a visua
  
 If we then click on the photo of the user who uploaded the trail, we'll see their profile
 
-<a href="http://salterhebble.com/s3/profile.html"><img src="http://salterhebble.com/s3/st3.jpg"></a>
+<a href="http://salterhebble.com/s3/profile.html"><img src="http://salterhebble.com/s3/st5.jpg"></a>
 
 [http://salterhebble.com/s3/profile.html](http://)
 
