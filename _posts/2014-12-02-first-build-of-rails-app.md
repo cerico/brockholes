@@ -105,7 +105,7 @@ lets, populate out database and have a look in the browser
     </div>
     <% end %>
     
-so now we have a div for each of the 16 trails, but the information in each photobox is the same, so lets remove the hard coded trail and county and replace with the trail name and county from the database, so lets changed
+so now we have a div for each of the 16 trails, but the information in each photobox is the same, so lets remove the hard coded trail and county and replace with the trail name and county from the database, so lets change
 
 `Calderdale Way` to `<%= trail.name %>` and `West Yorkshire` to `<%= trail.county %>`
  
