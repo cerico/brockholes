@@ -95,7 +95,7 @@ lets, populate out database and have a look in the browser
  
  first of all lets take the following trails.each do and end ruby tags and wrap them around this div, so it now looks like this 
  
-     **<% @trails.each do |trail| %>**
+     <% @trails.each do |trail| %>
      <div class="index-photobox column-32">
       <a href="trail.html"><img src="https://calderscenic.s3.amazonaws.com/uploads/photo/image/2/frontpage_tod1.jpg"></a>
       <div class="everytrail_photofooter">
@@ -103,7 +103,7 @@ lets, populate out database and have a look in the browser
         <p class="everytrail_photofooter_county">West Yorkshire</p>
       </div>
     </div>
-    **<% end %>**
+    <% end %>
     
 so now we have a div for each of the 16 trails, but the information in each photobox is the same, so lets remove the hard coded trail and county and replace with the trail name and county from the database, so lets changed
 
