@@ -7,41 +7,41 @@ tags: [rails,html,css,layout]
 ---
 Lets build our Rails App! Its tempting when writing after the fact to leave things or forget things, so im including everything no matter how trivial seeming
 
-`rails new pennine -d postgresql`
+`➜ rails new pennine -d postgresql`
 
 I'm using rails 3.2 (for the first iteration).
 
-`cd pennine`
+`➜ cd pennine`
 
-`git init`
+`➜ git init`
 
 Creates a git repository for our app, now we can go to github, sign in, click respositories and create new repository. Ive called mine Pennine. Back to command line and
 
-`git add .`
+`➜  pennine git:(master) git add .`
 
-`git commit -m "first commit"`
+`➜  pennine git:(master) git commit -m "first commit"`
 
-`git remote add origin git@github.com:cerico/pennine.git`
+`➜  pennine git:(master) git remote add origin git@github.com:cerico/pennine.git`
 
-`git push origin master`
+` ➜  pennine git:(master) git push origin master`
 
 and we're good to go, but leave the master branch, and go to dev
 
-`git branch dev`
+`➜  pennine git:(master) git branch dev`
 
-`git checkout dev`
+`➜  pennine git:(master) git checkout dev`
 
-our terminal prompt is now 
+our our terminal prompt is now 
 
  `pennine git:(dev)`
  
 So lets start with Trails, we'll scaffold our Trails, to give use the Models, Views and Controllers. We'll be removing the views later on, when we introduce AngularJS, but we'll need them for now
 
-`rails g scaffold Trail name county postcode description:text lat:float lng:float rating:integer distance:float user_id:integer`
+`➜  pennine git:(dev) rails g scaffold Trail name county postcode description:text lat:float lng:float rating:integer distance:float user_id:integer`
 
-`rake db:create`
+`➜  pennine git:(dev) rake db:create`
 
-`rake db:migrate`
+`➜  pennine git:(dev) rake db:migrate`
 
 two more things to do, and we can have a look at our first page. Firstly, we need to delete public/index.html, and secondly we need to add the following line to config/routes.rb, so that our trails page is the default page when we browse to our app
 
@@ -49,7 +49,7 @@ two more things to do, and we can have a look at our first page. Firstly, we nee
 
 ok, lets start our rails server and have a look
 
-`rails server`
+`➜  pennine git:(dev) rails server`
 
 <img src="http://salterhebble.com/blogpics/newapp1.jpg">
 
@@ -65,11 +65,11 @@ but we dont have any trails yet!, so lets seed our database with some trails to 
 
 lets, populate out database and have a look in the browser
 
-`rake db:drop`
+`➜  pennine git:(dev) rake db:drop`
 
-` rake db:migrate`
+`➜  pennine git:(dev) rake db:migrate`
 
- `rake db:seed`
+`➜  pennine git:(dev) rake db:seed`
  
  <img src="http://salterhebble.com/blogpics/newapp2.jpg">
  
