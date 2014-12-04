@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Deployment on Heroku"
+title: "Deployment on Heroku, Dokku, and DNS"
 description: ""
 category: 
-tags: [deployment,heroku]
+tags: [deployment,heroku,dns]
 ---
 
 #Heroku
