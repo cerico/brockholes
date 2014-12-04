@@ -8,7 +8,9 @@ tags: [deployment,heroku,dns]
 
 #Heroku
 
-A shorter post now, as we upload our nascent app to Heroku. Firstly, you can only deploy from the git master branch, so lets git merge our master branch into dev, fix any conflicts - though there werent any), switch back into master and merge dev
+A shorter post now, this post is really more about Dokku than Heroku as I'm already set up on heroku, I wanted to document setting up Dokku in real time, as I hadnt done that before today. But first a little heroku...
+
+ Firstly, you can only deploy from the git master branch, so lets git merge our master branch into dev, fix any conflicts - though there werent any), switch back into master and merge dev
 
 `➜  pennine git:(dev) git merge master`
 
