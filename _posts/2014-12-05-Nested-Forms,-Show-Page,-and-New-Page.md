@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Nested Forms, Show page, New page"
+title: "Nested Forms, Show Page, New Page"
 description: ""
 category: 
 tags: [nested_forms,html,css,rails]
