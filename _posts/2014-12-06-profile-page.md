@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Profile Page"
+title: "Profile Page (Initial)"
 description: ""
 category: 
 tags: []
