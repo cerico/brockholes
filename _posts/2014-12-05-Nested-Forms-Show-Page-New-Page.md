@@ -126,7 +126,7 @@ and our number block, here
         <%= f.hidden_field :lng, :value => "-2.1"%>
         
         
-The first shows the user that just uploaded the trail, and the other 3 are temporary, the miles won't be input by a user, that will be calcuated later on via gpx import, and the initial latlng will be input by clicking on the map, but thats also for a little later. Now we need to look at photouploading, but before we do that, now that we dynamically have the trail uploaders id, lets put that onto the trails#show page, and replace
+The first shows the user that just uploaded the trail, and the other 3 are temporary, the miles won't be input by a user, that will be calcuated later on via gpx import, and the initial latlng will be input by clicking on the map, but thats also for a little later. Now we need to look at photouploading, but before we do that, now that we dynamically have the trail uploaders id, lets put that onto the trails#show page
 
 Firstly, we'll need to modify our trails controller, to show the user, so lets add the following @uploader line in, like so
 
