@@ -13,7 +13,7 @@ Lets get some of the other pages into view, we'll do the show page first, but be
 lets change
 
 
-to
+
 
 `<a class="active" href="trailsindex.html">Trails</a>`
 
