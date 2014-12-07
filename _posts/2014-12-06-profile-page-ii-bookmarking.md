@@ -23,6 +23,10 @@ so, our bookmark model, should look like this
       belongs_to :trail
       belongs_to :user
     end
+    
+ and make sure that both our trail model and our user model, both have 
+ 
+ `  has_many :bookmarks`
    
 Lets go to our trail#show page, and just put some additional information somewhere on the screen, right at the top of the page as this is just temporary. We'll show our currently logged in user, and we'll all the bookmarks the trail has, and we'll show all the bookmarks our currently logged in user has 
 
