@@ -71,7 +71,14 @@ so, now in our html we have
  
  <img src="http://salterhebble.com/blogpics/bookmark2.jpg">
  
- so, now we can start change our font-awesome hearts and ticks to reflect this data, changing the '12' to `<%= @completed.length %>` and the '21' to `<%= @favourites.length %>`
+ so, now we can start change our font-awesome hearts and ticks to reflect this data, changing the '12' to `<%= @completeds.length %>` and the '21' to `<%= @favourites.length %>` , but we;ll also need to wrap that in a block in case there are no completed or favourites for this particular trail
+ 
+    <% if @completeds.present? %>
+      <li><a href="#"><%= @completeds.length %>  Hikers <i class="fa fa-check circle green"></i></a></li>
+    <%end%>
+    <% if @favourites.present? %>
+      <li><a href="#"><%= @favourites.length %> Hikers <i class="fa fa-heart red"></i></a></li>
+     <% end %>
  
  and then the heart and tick we inside the photo, we can wrap in an if statement, so we can have something like this 
  
@@ -158,10 +165,10 @@ I didnt have any css for this in the dummmy site, so lets quickly do someething 
             </div>
             <div class="everytrail_photofooter_userinfo">
               <ul>
-                <% if trail.bookmarks.present? && trail.bookmarks.find_by_user_id(current_user.id).completed %>
+                <% if trail.bookmarks.present? && trail.bookmarks.find_by_user_id(current_user.id).favourited %>
                   <li><i class="fa fa-heart red"></i></li>
                 <% end %>
-                <% if trail.bookmarks.present? && trail.bookmarks.find_by_user_id(current_user.id).favourited %>
+                <% if trail.bookmarks.present? && trail.bookmarks.find_by_user_id(current_user.id).completed %>
                   <li><i class="fa fa-check circle green"></i></li>
                 <% end %>
               </ul>
@@ -176,7 +183,7 @@ I didnt have any css for this in the dummmy site, so lets quickly do someething 
     .everytrail_photofooter_userinfo {
     float:right;
     color: #f5f6f1;
-    font-weight:100%;
+    font-weight:100;
     margin-top:-2%;
     }
     
