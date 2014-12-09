@@ -385,11 +385,11 @@ with
 
 but this is now showing us the total number of bookmarks for the trail, regardless of favourited status, so lets filter that, and changed again to
 
-{{(trail.bookmarks|filter: {completed:true}).length}}
+`{{(trail.bookmarks|filter: {completed:true}).length}}`
 
 and 
 
-{{(trail.bookmarks|filter: {favourited:true}).length}}
+`{{(trail.bookmarks|filter: {favourited:true}).length}}`
 
 
 and we can get rid of the if statements around this, so we should end up with

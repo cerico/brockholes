@@ -10,6 +10,7 @@ github_username:  cerico
 
 # Build settings
 markdown: kramdown
+permalink: pretty
 tags:
 - jekyll
 - code
