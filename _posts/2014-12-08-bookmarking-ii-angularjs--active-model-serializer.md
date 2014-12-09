@@ -387,12 +387,6 @@ but this is now showing us the total number of bookmarks for the trail, regardle
 
 
 
-
-and we can get rid of the if statements around this, so we should end up with
-
-    <li><a href="#">{{(trail.bookmarks|filter: {completed:true}).length}}  Hikers <i class="fa fa-check circle green"></i></a></li>
-    <li><a href="#">{{(trail.bookmarks|filter: {favourited:true}).length}} Hikers <i class="fa fa-heart red"></i></a></li>
-
 #photos
 
 lets finish off our trails#show page by converting the photos to being handled by angular too, but the photos model isnt yet part of our active model serializer, so lets add that in, which is just as simple as adding in the line `has_many :bookmarks` to the trail_serializer.rb
