@@ -387,6 +387,9 @@ but this is now showing us the total number of bookmarks for the trail, regardle
 
 
 
+<img src="http://salterhebble.com/blogpics/ams5.jpg">
+
+
 #photos
 
 lets finish off our trails#show page by converting the photos to being handled by angular too, but the photos model isnt yet part of our active model serializer, so lets add that in, which is just as simple as adding in the line `has_many :bookmarks` to the trail_serializer.rb
