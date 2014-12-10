@@ -189,7 +189,7 @@ ok! So now we have all our info via json, including the associated bookmark info
 
 with
 
-`{{trail.name}}`
+     {{trail.name}}
 
 Now we have access to our users bookmark state from the received json, we can reflect that in the page, lets make a default state of notfaved and notcompleted, and then move our $http GET method into a function, so we can call it any time 
 
@@ -377,7 +377,7 @@ and now out favourite and completeing, unfavouriting and uncompleting work in re
 
 so now we can replace
 
-`<%= @completeds.length %>  Hikers `
+`<%= @completeds.length %>  Hikers`
 
 with 
 
