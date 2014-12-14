@@ -20,7 +20,7 @@ then we can require ui-router and angular templates in the application.js
 
 <img src="http://salterhebble.com/blogpics/ui3.jpg">
 
-Now let replace our rails <% yield %> with ui-view, which is where our angular templates will get injected
+Now let replace our rails <% yield %> with ui-view, which is where our angular templates will get injected, here they are in layouts/application.html.erb
 
 <img src="http://salterhebble.com/blogpics/ui4.jpg">
 
@@ -46,13 +46,10 @@ and if this outputs correctly, we can cut and paste the html from our trails#ind
 
 We should now change our links, and add a hashbang for all angular routes
 
-Before we go ahead and do the profile, new and map pages, lets make sure this is going to work on dokku and heroku. Lets add the following to our config/application.rb
+Before we go ahead and do the profile, new and map pages, lets make sure this is going to work on dokku and heroku. Lets replace config.assets.precompile=false in the config/application.rb with
 
-<img src="http://salterhebble.com/blogpics/ui9.jpg">
+<img src="http://salterhebble.com/blogpics/precompile.jpg">
 
-and I precompiled locally to get around dokku problems, but it means out asset pipeline will be in tact when delivered from dokku
-
-<img src="http://salterhebble.com/blogpics/ui10.jpg">
 
 Now lets go back to our app, and create the templates for the rest of our pages
 
@@ -84,12 +81,6 @@ to
 <img src="http://salterhebble.com/blogpics/angform.jpg">
 
 We're going to include a dropzone here, so we'll leave the newtrail template here for now, and cover that later
-
-#A note about deployment
-
-I also needed to make a change here in my application.rb, removing config.assets.precompile=false (which is needed for initial push to dokku, when the database doesnt exist yet) and adding in the following two lines
-
-<img src="http://salterhebble.com/blogpics/precompile.jpg">
 
 
 
