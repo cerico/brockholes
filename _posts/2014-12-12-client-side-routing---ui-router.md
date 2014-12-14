@@ -50,6 +50,10 @@ Before we go ahead and do the profile, new and map pages, lets make sure this is
 
 <img src="http://salterhebble.com/blogpics/precompile.jpg">
 
+and we'll also need to exclude the map and zip files from our repository, to avoid dokku issues 
+
+<img src="http://salterhebble.com/blogpics/gitrm.jpg">
+
 
 Now lets go back to our app, and create the templates for the rest of our pages
 
@@ -80,7 +84,7 @@ to
 
 <img src="http://salterhebble.com/blogpics/angform.jpg">
 
-We're going to include a dropzone here, so we'll leave the newtrail template here for now, and cover that later
+We're going to include a dropzone here, so we'll leave the newtrail template here for now, and cover that in the next post
 
 
 
