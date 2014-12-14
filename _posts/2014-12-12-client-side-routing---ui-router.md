@@ -32,6 +32,10 @@ and we can start our router
 
 <img src="http://salterhebble.com/blogpics/ui6.jpg">
 
+(above you can see that the controllers for each template are being defined here, in the main app.js.erb, which means we should remove the ng-controller from the templage page itself - so lets go ahead and delete that, otherwise we're likely to be doubling up any trips to the server)
+
+<img src="http://salterhebble.com/blogpics/remove.jpg">
+
 so we'll use $stateProvider, $urlRouterProvider and $locationProvider, and we'll define two routes for now, /trails, for our trails index page, and /trails/:id for the trails#show pages, and they'll come under the controllers we've previously written for them. We'll also make a default url, that'll take us to the trails index page. Now lets create those two templates, in app/assets/javascripts/templates, and call them trailsindex.html and trail.html, and we'll just output the following on both to make sure they hook to our router and controllers correctly
 
 <img src="http://salterhebble.com/blogpics/ui7.jpg">
@@ -81,6 +85,11 @@ to
 
 We're going to include a dropzone here, so we'll leave the newtrail template here for now, and cover that later
 
+#A note about deployment
+
+I also needed to make a change here in my application.rb, removing config.assets.precompile=false (which is needed for initial push to dokku, when the database doesnt exist yet) and adding in the following two lines
+
+<img src="http://salterhebble.com/blogpics/precompile.jpg">
 
 
 
