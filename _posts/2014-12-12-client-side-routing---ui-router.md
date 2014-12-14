@@ -61,7 +61,7 @@ so here we've created routes for profile, new trail and map templates, so now le
 
 we already have a profile controller in profile.js.erb, so lets create a new.js.erb and a map.js.erb to go along with that. And change the links in the navbar to be angular links, with the hashbang in place
 
-<img src="http://salterhebble.com/blogpics/ui14.jpg">
+<img src="http://salterhebble.com/blogpics/links.jpg">
 
 The profile page should work straightaway as we have already written the controller for it, but as before the http GET request shoud change to location.path()
 
