@@ -197,12 +197,16 @@ and in the show method, we can specify the new points serializer, so only on an 
 
 <img src="http://salterhebble.com/blogpics/gpx28.jpg">
 
+#affect on dropzone
+
+A side effect of using the dropzone to add both photos and gpx is that a user can now upload a trail without an image (as they need to attach at least one file, but that file could be gpx). Although we will be adding validation to our form shortly, ive added something here to handle cases where a form comes with gpx data but no image, 
 
 
+30)
 
+<img src="http://salterhebble.com/blogpics/bootspic.jpg">
 
-
-
+which will create an image of a pair of hiking boots if the dropzone upload only contains gpx
 
 
 
