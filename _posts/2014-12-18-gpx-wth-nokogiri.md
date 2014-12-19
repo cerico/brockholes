@@ -164,16 +164,20 @@ We already have the dropzone posting to the photocontroller, so i decided to reu
 
 one the file is received, if its a jpg it can be processed just as before, but now (line 56), if its gpx data, we find the trail, and then update its gpx attribute, with the attached file
 
+25)
+
+<img src="http://salterhebble.com/blogpics/gpxshow.jpg">
+
 #Custom Serializers
 
 If we're going to be serializing the points, we're now increasing the amount of JSON data, potentially quite significantly, and given that a) we only need the points data on the trail view, and not any other views, we should think about reducing the overhead, so to do this i created a custom serializer
 
 
-25)
+26)
 
 <img src="http://salterhebble.com/blogpics/gpx26.jpg">
 
-26)
+27)
 
 <img src="http://salterhebble.com/blogpics/gpx25.jpg">
 
@@ -182,18 +186,18 @@ In the original trail serializer, Ive now commented out the associated tracksegm
 
 and now in the index controller, no serializer is specifed, which means it will look for the default trail serializer
 
-27)
+28)
 
 <img src="http://salterhebble.com/blogpics/gpx27.jpg">
 
 
 and in the show method, we can specify the new points serializer, so only on an individual trail page the points will be returned
 
-28)
+29)
 
 <img src="http://salterhebble.com/blogpics/gpx28.jpg">
 
-#
+
 
 
 
