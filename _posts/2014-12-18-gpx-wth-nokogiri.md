@@ -154,17 +154,27 @@ we can then create polylineSteps as part of the map object (line 59), and then i
 
 <img src="http://salterhebble.com/blogpics/gpx23.jpg">
 
+At the moment the trail map has a hard-coded zoom level, and has its marker as the centre of the map. I wanted to keep these if the trail doesnt have gpx data, but have the map zoom in/out to fit the polyline in, if there was gpx data. I wanted to use fitBounds, but i had to wait for the map to load and be visible for this to work, so i set it up as follows
+
+23) fitBounds
+
+<img src="http://salterhebble.com/blogpics/bounds.jpg">
+
+<img src="http://salterhebble.com/blogpics/fitbounds.jpg">
+
+I set an empty bounds object, then extended this with each point on the trail. Then if the trail has points, and therefore a polyline, once the map is set up, add a one time eventlistener for when all the tiles have loaded, and then fitBounds to the bounds previously extended
+
 #Adding GPX to an existing trail
 
 We already have the dropzone posting to the photocontroller, so i decided to reuse this controller to process gpx files, which kind of makes this a file controller rather than a photo controller now, lets have a look at the the photocontroller's create method
 
-24)
+25)
 
 <img src="http://salterhebble.com/blogpics/gpx24.jpg">
 
 one the file is received, if its a jpg it can be processed just as before, but now (line 56), if its gpx data, we find the trail, and then update its gpx attribute, with the attached file
 
-25)
+26)
 
 <img src="http://salterhebble.com/blogpics/gpxshow.jpg">
 
@@ -173,11 +183,11 @@ one the file is received, if its a jpg it can be processed just as before, but n
 If we're going to be serializing the points, we're now increasing the amount of JSON data, potentially quite significantly, and given that a) we only need the points data on the trail view, and not any other views, we should think about reducing the overhead, so to do this i created a custom serializer
 
 
-26)
+27)
 
 <img src="http://salterhebble.com/blogpics/gpx26.jpg">
 
-27)
+28)
 
 <img src="http://salterhebble.com/blogpics/gpx25.jpg">
 
@@ -186,14 +196,14 @@ In the original trail serializer, Ive now commented out the associated tracksegm
 
 and now in the index controller, no serializer is specifed, which means it will look for the default trail serializer
 
-28)
+29)
 
 <img src="http://salterhebble.com/blogpics/gpx27.jpg">
 
 
 and in the show method, we can specify the new points serializer, so only on an individual trail page the points will be returned
 
-29)
+30)
 
 <img src="http://salterhebble.com/blogpics/gpx28.jpg">
 
@@ -202,11 +212,13 @@ and in the show method, we can specify the new points serializer, so only on an 
 A side effect of using the dropzone to add both photos and gpx is that a user can now upload a trail without an image (as they need to attach at least one file, but that file could be gpx). Although we will be adding validation to our form shortly, ive added something here to handle cases where a form comes with gpx data but no image, 
 
 
-30)
+31)
 
 <img src="http://salterhebble.com/blogpics/bootspic.jpg">
 
 which will create an image of a pair of hiking boots if the dropzone upload only contains gpx
+
+
 
 
 
