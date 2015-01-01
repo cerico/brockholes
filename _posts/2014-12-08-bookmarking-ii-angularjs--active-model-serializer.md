@@ -4,6 +4,7 @@ title: "Bookmarking II: AngularJS & Active Model Serializer"
 description: ""
 category: 
 tags: [angularjs,bower,active model serializer,javascript]
+summary: "Adding Angular to the app"
 ---
 
 #Angular

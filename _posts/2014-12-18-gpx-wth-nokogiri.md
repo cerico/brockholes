@@ -4,6 +4,7 @@ title: "GPX wth Nokogiri"
 description: ""
 category: 
 tags: [rails,nokogiri,paperclip,gpx]
+summary: "Adding a trail route with gpx via nokigiri"
 ---
 
 #Adding gpx to the new trail form
@@ -60,13 +61,25 @@ the tracksegment we need to add a has_many relation
 
 <img src="http://salterhebble.com/blogpics/gx8.jpg">
 
-and the trail model needs has_many for tracksegments, and a has_many through for points, an attached_file for gpx, and a parse_file method before save, which we'll then need to write
+
+
+the tracksegment we need to add a has_many relation
+
+
+
+
+
+
+
+and the trail model needs a hasmany for tracksegments, and a hasman through for points, an attachedfile for gpx. and a parse_file method before save, which we'll then need to write
 
 9)
 
 <img src="http://salterhebble.com/blogpics/gx9.jpg">
 
-the parse_file method taken from the link above and shown below only handled certain types of gpx file and didnt process the gpx file i was originally trying with, so im not sure how many different formats gpx files come in, below ive modified a couple of the methods (appended with a 2), in order for it to work with a second form of gpx, but this looks to be an area for further investigation and testing with different gpx files. Lets also wrap the parse_gpx method in an if statement as most trails will probably be uploaded without gpx data
+the parse_file method taken from the link above and shown below only handled certain types of gpx file and didnt process the gpx file i was originally trying with, so im not sure how many different formats gpx files come in, below ive modified a couple of the methods (appended with a 2), in order for it to work with a second form of gpx, but this looks to be an area for further investigation and testing with different gpx files. 
+
+Lets also wrap the parse_gpx method in an if statement as most trails will probably be uploaded without gpx data
 
 10)
 

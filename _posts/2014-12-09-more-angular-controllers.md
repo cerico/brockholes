@@ -4,6 +4,7 @@ title: "More Angular Controllers"
 description: ""
 category: 
 tags: [angular,javascript,controllers]
+summary: "Lets introduce angular controllers for our index, profile, and new pages."
 ---
 Lets introduce angular controllers for our index, profile, and new pages.
 

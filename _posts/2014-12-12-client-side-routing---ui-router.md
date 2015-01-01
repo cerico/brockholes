@@ -4,6 +4,7 @@ title: "Client Side Routing with ui-router"
 description: ""
 category: 
 tags: [ui-router,angular]
+summary: "We've introduced angular to our app, but the views are still being handled by Rails, we can reduce trips to the server by moving our routing to the front end, and injecting templates. I originally did this with the standard ng-route, but here i'm going to be using ui-router"
 ---
 We've introduced angular to our app, but the views are still being handled by Rails, we can reduce trips to the server by moving our routing to the front end, and injecting templates. I originally did this with the standard ng-route, but here i'm going to be using ui-router, so lets first add that to our Bowerfile and install
 

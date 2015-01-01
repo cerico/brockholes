@@ -4,6 +4,7 @@ title: "Angular Google Maps II"
 description: ""
 category: 
 tags: [angular,google maps]
+summary: "Using google maps to supply co-ordinates to a new trail"
 ---
 #New Trail Page
 

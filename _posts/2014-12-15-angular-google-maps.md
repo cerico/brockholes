@@ -4,6 +4,7 @@ title: "Angular Google Maps"
 description: ""
 category: 
 tags: [angular,google,maps]
+summary: 'Adding angular-google-maps to the app'
 ---
 
 #Trail Page

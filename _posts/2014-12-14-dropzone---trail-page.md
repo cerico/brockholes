@@ -4,6 +4,7 @@ title: "Dropzone   Trail Page"
 description: ""
 category: 
 tags: [jquery,dropzone]
+summary: "Using a dropzone to upload images to an existing trail"
 ---
 Lets go back to our trail page and allow users to add photos to an existing trail, and for this I'm using the dropzone plugin, lets add it to the Bowerfile, install, and then require it in the application.js
 

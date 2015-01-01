@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "Dropzone II   new trail"
+title: "Dropzone II"
 description: ""
 category: 
 tags: [dropzone,jquery,angular]
+summary: "Combining the dropzone plugin with a regular form to upload trails and associated images simultaneously"
 ---
 Now lets also make a dropzone uploader for our newtrails template. There is a subtle difference here. On the existing trail page, the photo is just uploaded onto the page/trail, and belongs_to that trail - and it goes there as soon as it is dropped on the page. On the new trail page, there is no trail for it to belongs_to...yet, so as soon as its added, it has to be held back, and then submitted as part of a regular form
 

@@ -1,11 +1,8 @@
 ---
 layout: page
-title: About
+title: About Scenic
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+This is a small blog, detailing the building of my app, [scenic](http://scenic.apps.salterhebble.com), for finding and creating hiking trails. Its written primarily for my own benefit to help me learn. The blog is written with [Jekyll](http://jekyllrb.com), using a theme from [Pixyll](http://pixyll.com) and hosted on [GithubPages](https://pages.github.com/).
