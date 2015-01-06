@@ -133,7 +133,7 @@ But we want to protect this at the server end, because "never trust the client".
 def destroy
 
   @photo = Photo.find(params[:id])
-    if current_user.id === Trail.find_by_id(@photo.trail_id).user_id && Trail.find_by_id(@photo.trail_id).photos.length > 1
+    if current_user.id === Trail.find_by_id(@photo.trail_id).user_id && @photo.name != "main" && Trail.find_by_id(@photo.trail_id).photos.length > 1
     @photo.destroy
 
     respond_to do |format|
