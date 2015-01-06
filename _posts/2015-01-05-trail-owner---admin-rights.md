@@ -432,7 +432,7 @@ end
 end
 {% endhighlight%}
 
-#ngScrollTo
+#anchorScroll
 
 The admin buttons for the deleting a photo or making it the main photo are towards the bottom of the page and not immediately obvious like the trail rename button, so lets make all our admin buttons at the top of the page, and use them to navigate to the part of the page we want, lets start by injecting $anchorScroll into the trail controller.
 
