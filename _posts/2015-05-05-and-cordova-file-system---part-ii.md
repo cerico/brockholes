@@ -66,6 +66,99 @@ Lets first look at the getFileSystem function
           }
 {%endhighlight%}
 
-This function just returns the file to be uploaded, again we have the defer.resolve and the defer.promise. First we request the filesystem, and that is passed a required ileSystem fuction, which creates a directory reader - and <i>that</i> is passed the findAFile function, which iterates through everything it finds in the root directory, and searches for an mp4 with the sale object's filename value). If it finds a file with this filename, it resolves it and the promise is fulfilled and return back to the sendCurrentFile function. Lets go back and look at that 
+This function just returns the file to be uploaded, again we have the defer.resolve and the defer.promise. First we request the filesystem, and that is passed a required ileSystem fuction, which creates a directory reader - and <i>that</i> is passed the findAFile function, which iterates through everything it finds in the root directory, and searches for an mp4 with the sale object's filename value). If it finds a file with this filename, it resolves it and the promise is fulfilled and return back to the sendCurrentFile function. Lets go back and look at that
+
+    {%highlight javascript%}
+
+        return {
+            sendCurrentFile: function(sale){
+                var defer = $q.defer();
+                 window.fileStorage.getFileSystem(sale).then(function(file){
+                        window.fileStorage.uploadVideo(file,sale).then(function(result){
+                            defer.resolve(result);
+                        })
+                    });
+                return defer.promise
+            }
+          }
+          {%endhighlight%}
+ 
+ So now we have had the file object passed back to us, we can now run the uploadVideo function, passing it the sale we were originally passed, and now also the file we just received, so again we go back into the internal or non-exposed part of the factory and run this function, lets look at it (again, truncated to just the relevant parts)
+ 
+ {%highlight javascript%}
+ 
+             uploadVideo:function(file,sale){
+
+                var defer = $q.defer();
+                var ft = new FileTransfer()
+                var path = file.nativeURL
+                var name = file.name;
+                var server = $auth.apiUrl() + "/api/v1/sales/update_with_video";
+                var uploadSuccess = function(result) {
+                        defer.resolve(file);
+                    file.remove(function(file){
+                        console.log("file successfully removed");
+                    });
+                };
+                ft.upload(path, server, uploadSuccess, uploadError, {});
+                };
+                return defer.promise
+            },
+            {%endhighlight%}
+ 
+ So again we can see the defer.resolve and defer.promise in play, it will only return the result, once a result has been arrived at, so we pass it the file we were returned in our previous function, and this is uploaded to our rails API endpoint. What we are interested in here is the uploadSuccess function, once this file has transferred to the rails server successfully, it is resolved (and removed, in our case!) - and the promise is fulfilled and the result returned back to the sendCurrentFile function.
+
+and now if we look back at that again, 
+
+    {%highlight javascript%}
+
+        return {
+            sendCurrentFile: function(sale){
+                var defer = $q.defer();
+                 window.fileStorage.getFileSystem(sale).then(function(file){
+                        window.fileStorage.uploadVideo(file,sale).then(function(result){
+                            defer.resolve(result);
+                        })
+                    });
+                return defer.promise
+            }
+          }
+          {%endhighlight%}
+          
+we can see that it is only <i>now</i> that the result can be resolved, and this functions <i>own</i> promise can can be fulfilled, and finally returned back to the controller
+
+And now looking back to our controller
+
+
+     {%highlight javascript%}
+    $scope.uploadAndSync = function(sale){
+            sale.syncing = true;
+        UploadFactory.sendCurrentFile(sale).then(function(data){
+            sale.syncing = false;
+            SaleService.synchedVideo(sale)
+            $scope.sales = SaleService.getAllSales();
+        });
+    }
+    {%endhighlight%}
+    
+ now that the promise has been resolved, the syncing process is over and sycning can be set to false, and we can run any other functions we want, knowing that the video has succesfully uploaded, here we have some other functions that should only be run against a sale, once its video has been uploaded and saved
+ 
+<h3>Rails API</h3>
+
+Lets briefly have a little look at what happens at the server end, when the file arrives
+
+{%highlight ruby%}
+ 
+   def update_with_video
+    @sale = Sale.find_by_id(params[:file].original_filename)
+    @sale.update(video:params[:file],hasvideo:true)
+    result = {status: true, message: 'Success',sale: @sale}
+    render :json => result
+  end
+  
+  {%endhighlight%}
+  
+Here we an see the endpoint, we can find the sale because the filename of the video has that as its id, so we can now update the Sale's video parameter with the file (via carrierwave), and set the hasvideo boolean to true, we can then return the result back to our Ionic app as json 
+
 
 
