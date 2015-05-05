@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "$q and cordova file system   part II"
-description: ""
+description: "You remember in the last post we looked at introducing $q, now we can see how it really comes into its own, when we need to traverse the cordova file system, search for a file, upload it, and return the result."
 category: 
 summary: You remember in the last post we looked at introducing $q, now we can see how it really comes into its own, when we need to traverse the cordova file system, search for a file, upload it, and return the result.
 tags: [cordoba, $q]
