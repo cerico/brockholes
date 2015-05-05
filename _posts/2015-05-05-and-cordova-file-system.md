@@ -8,9 +8,9 @@ tags: [cordova,$q]
 
 This is my first post since joining my new company, and I'm going to talk about $q and deferred promises, and about cordova file transfers. So, first, a little context. We have a sale object on the ipad, which has been posted to a Rails server, and it has an associated video, which needs to be updated at a later date. Our task here is to locate the video on the ipads filesystem and upload it to the rails server too.
 
-{%highlight html%}
+
 <h3>1. The View</h3>
-{%endhighlight%}
+
 
 The easiest part of the picture,
 
