@@ -171,22 +171,24 @@ app.factory('calderFactory', ['$http','$q', function ($http,$q) {
             var defer = $q.defer();
              COMPLICATEDSTUFF.then(result){
                 defer.resolve.(result)
-            }})
+            }
             return defer.promise
         }
         function secondfunction(rain,wind){
             var defer = $q.defer();
             COMPLICATEDSTUFF.then(result){
                 defer.resolve.(result)
+            }
             return defer.promise
         }
-        function thirdfunction(rain,wind,traffic) {
-            var defer = $q.defer();
-            COMPLICATEDSTUFF.then(result){
-                defer.resolve.(result)
-                return defer.promise
-            }
+    function thirdfunction(rain,wind){
+        var defer = $q.defer();
+        COMPLICATEDSTUFF.then(result){
+            defer.resolve.(result)
         }
+        return defer.promise
+    }
+        
 
         return {
             getWeather: function (rain) {
@@ -213,6 +215,7 @@ app.factory('calderFactory', ['$http','$q', function ($http,$q) {
             });
         }
     };
+
 {%endhighlight%}
 
 what we have here are 3 internal factory functions which do 'COMPLICATEDSTUFF', and are called in turn by the getWeather function in the factory, and this is the only function exposed to the controller. We can think of the returned 'getWeather' function in the factory as controller-facing, or customer-facing, like a waiter, while the factory's other functions can be thought of as like chefs, the controller cant call them directly, the returned getWeather function is merely presenting the work done by the chef functions
