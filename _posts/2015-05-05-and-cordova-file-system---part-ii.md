@@ -160,5 +160,61 @@ Lets briefly have a little look at what happens at the server end, when the file
   
 Here we an see the endpoint, we can find the sale because the filename of the video has that as its id, so we can now update the Sale's video parameter with the file (via carrierwave), and set the hasvideo boolean to true, we can then return the result back to our Ionic app as json 
 
+<h3>Recap</h3>
+
+Lets take a step back, and see how this works in an overview, we'll take out anything to do specificaly with Cordova and put some arbitrary functions in
+
+{%highlight javascript%}
+app.factory('calderFactory', ['$http','$q', function ($http,$q) {
+
+        function firstfunction(rain){
+            var defer = $q.defer();
+             COMPLICATEDSTUFF.then(result){
+                defer.resolve.(result)
+            }})
+            return defer.promise
+        }
+        function secondfunction(rain,wind){
+            var defer = $q.defer();
+            COMPLICATEDSTUFF.then(result){
+                defer.resolve.(result)
+            return defer.promise
+        }
+        function thirdfunction(rain,wind,traffic) {
+            var defer = $q.defer();
+            COMPLICATEDSTUFF.then(result){
+                defer.resolve.(result)
+                return defer.promise
+            }
+        }
+
+        return {
+            getWeather: function (rain) {
+                var defer = $q.defer();
+                firstfunction(rain).then(function (wind) {
+                    secondfunction(rain, wind).then(function (traffic) {
+                        thirdfunction(rain, wind, traffic).then(function (happiness) {
+                            defer.resolve(happiness);
+                        })
+                    })
+                });
+                return defer.promise
+            }
+        }
+    }]);
+
+    app.controller('MyController', function ($scope, $state, CalderFactory,RibbleFactory) {
+
+        $scope.basicFunction = function (rain) {
+            weather.checking = true;
+            calderFactory.getWeather(sale).then(function (data) {
+                weather.checking = false;
+                ribbleFactory.recordResult(data)
+            });
+        }
+    };
+{%endhighlight%}
+
+what we have here are 3 internal factory functions which do 'COMPLICATEDSTUFF', and are called in turn by the getWeather function in the factory, and this is the only function exposed to the controller. We can think of the returned 'getWeather' function in the factory as controller-facing, or customer-facing, like a waiter, while the factory's other functions can be thought of as like chefs, the controller cant call them directly, the returned getWeather function is merely presenting the work done by the chef functions
 
 
