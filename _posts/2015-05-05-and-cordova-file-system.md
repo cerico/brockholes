@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "$q and cordova file system - part one"
-description: ""
+description: "A gentle introduction to $q"
 category: 
 tags: [cordova,$q]
 ---
