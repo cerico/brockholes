@@ -3,7 +3,7 @@ layout: post
 title: "$q and cordova file system - part one"
 description: "A gentle introduction to $q"
 category: 
-summary: "This is my first post since joining my new company, and I'm going to talk about $q and deferred promises, and about cordova file transfers."
+summary: This is my first post since joining my new company, and I'm going to talk about $q and deferred promises, and about cordova file transfers.
 tags: [cordova,$q]
 ---
 
