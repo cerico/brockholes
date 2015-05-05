@@ -3,9 +3,10 @@ layout: post
 title: "$q and cordova file system   part II"
 description: ""
 category: 
+summary: You remember in the last post we looked at introducing $q, now we can see how it really comes into its own, when we need to traverse the cordova file system, search for a file, upload it, and return the result.
 tags: [cordoba, $q]
 ---
-You remember in the last post we looked at introducing $q, now we can see how it really comes into its own, when we need to traverse the cordove file system, search for a file, upload it, and return the result. We want to keep all that logic out of the controller, and we actually want to keep most of it out of the Factory function that is exposed to the controller. Most of the logic is going to take place in internal functions within the factory. Lets look at our controller first, you'll remember from the last post, we were about to run a $scope.uploadAndSync function.
+You remember in the last post we looked at introducing $q, now we can see how it really comes into its own, when we need to traverse the cordova file system, search for a file, upload it, and return the result. We want to keep all that logic out of the controller, and we actually want to keep most of it out of the Factory function that is exposed to the controller. Most of the logic is going to take place in internal functions within the factory. Lets look at our controller first, you'll remember from the last post, we were about to run a $scope.uploadAndSync function.
 
     {%highlight javascript%}
     $scope.uploadAndSync = function(sale){
