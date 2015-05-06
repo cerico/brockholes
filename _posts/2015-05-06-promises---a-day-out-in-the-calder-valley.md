@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Promises - A day out in the calder valley"
+title: "Promises: A day out in West Yorkshire"
 description: ""
 category: 
 summary: The premise of this little app, is we want to go on a day out visiting some towns that serve Little Valley Ale. Ideally we'd like to stay in yorkshire, so we'll check there, and if we don't have enough towns, only then will we look further afield, in Lancashire
