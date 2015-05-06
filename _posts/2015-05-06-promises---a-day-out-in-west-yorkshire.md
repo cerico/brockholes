@@ -15,20 +15,20 @@ The premise of this little app, is we want to go on a day out visiting some town
 
 {%highlight html%}
 
-          number of towns we'd like to visit = {{required_towns}}
+          number of towns we'd like to visit = {% raw %}{{required_towns}}{% endraw %}
                <p class="button green towns back-link-honley" ng-click="visit(2)">2</p>
            <p class="button green towns back-link-honley" ng-click="visit(3)">3</p>
            <p class="button green towns back-link-honley" ng-click="visit(4)">4</p>
           yorkshire towns:         
-            <ul><li ng-repeat="town in yorkshire_towns">{{town.name}}</li></ul> 
+            <ul><li ng-repeat="town in yorkshire_towns">{% raw %}{{town.name}}{% endraw %}</li></ul> 
                
           lancashire towns: 
-             <ul><li ng-repeat="town in lancashire_towns">{{town.name}}</li></ul> 
+             <ul><li ng-repeat="town in lancashire_towns">{% raw %}{{town.name}}{% endraw %}</li></ul> 
 
-            do we have enough towns? = {{enough_towns}}<br>
+            do we have enough towns? = {% raw %}{{enough_towns}}{% endraw %}<br>
                <ul>
                 towns serving Little Valley Ales: 
-            <li ng-repeat="town in towns_serving_little_valley">{{town.name}}</li></ul> 
+            <li ng-repeat="town in towns_serving_little_valley">{% raw %}{{town.name}}{% endraw %}</li></ul> 
 {%endhighlight%}
 
 all fairly self-explanatory here, we're going to show the number of towns the user wants to visit, the numbe of towns in yorkshire, the number of towns in lancashire and the number of towns serving our favoured ale, the user can click on a button to choose how many towns
