@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "promises   a day out in the calder valley"
+title: "Promises - A day out in the calder valley"
 description: ""
 category: 
-tags: []
+summary: The premise of this little app, is we want to go on a day out visiting some towns that serve Little Valley Ale. Ideally we'd like to stay in yorkshire, so we'll check there, and if we don't have enough towns, only then will we look further afield, in Lancashire
+tags: [$q, promises]
 ---
 
 Lets have another look at promises, and we can see a real example here, at [http:/calder.io/promises](http://calder.io/promises)
@@ -201,7 +202,7 @@ Here we have 3 different types of Little Valley ales, and the serveLittleValley 
  
 Here we can see why promises are used, we can only evaluate certain things once events have run their course. We don't want to check the lancashire towns, until the yorkshire towns have been checked, and then we can save ourselves an unneccessary trip to the server, that the lancashire service is simulating
 
-Mine's a Withens Top please
+Mine's a Withens Top please - don't forget to go have a look at this in practive at <a href="http://calder.io/promises">http://calder.io/promises</a>
 
 
 
