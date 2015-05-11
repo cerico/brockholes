@@ -9,7 +9,7 @@ summary: The app i'm working on at the moment has to have the ability to display
 
 Our task today is something of a complex multi-faceted one. The app i'm working on at the moment has to have the ability to display 3rd party content in an iframe, and it must be able to do it offline. Our customers have to be able to upload a zipfile of a site to the rails server, and their ipad users must be able to download that zipfile, and be able to display it while offline, and they must be able to download and display multiple apps/products in the iframe.
 
-1 Rails
+<h3>1 Rails</h3>
 
 Lets start at the rails end, the customer has to be able to upload a zipfile of their product/application, the html, the css, the js, and any associated photos or videos. We also have to allow for the fact they may want to update existing products. I decided the best way to manage this was to allow a customer to has_many products, and to mark them as either active or inactive, and that only active products would be returned to the ipad via the API. I decided to derive the name of the product at the ionic end from the name of the zipfile. This presented a challenge, how to prevent the customer from mulitple uploads with the zipfile named the same.
 
