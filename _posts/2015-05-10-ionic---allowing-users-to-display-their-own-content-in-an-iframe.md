@@ -99,3 +99,55 @@ products_controller.rb
     
 Some of this should move out into a helper method, but its staying here for the minute! If we're deactivating a product, its straightforward, we just turn it false, nothing else. But if we're activating a product we want to make sure its the only active product with that name, so we check there are no other active products with that name, belonging to the company of the current admin, and if there aren't any, we can turn this product active, and if there are we flash an error 
 
+2. API 
+
+Now lets look at the API
+
+ap1/v1/products_controller.rb
+
+this now makes the api controller's get_new_products method really simple! All it has to do is return all active products for that company, knowing there can't be any duplicates
+
+    {%highlight ruby%}
+      def get_new_products
+
+    products = Product.where(company_id:current_user.company_id,active:true)
+
+    render :json => products
+
+    end
+    {%endhighlight%}
+    
+Now lets move to the ipad, and have a look at the code there
+
+3. ProductsController.js
+
+        {%highlight javascript%}
+        $scope.checkProducts = function(){
+          ProductsService.downloadProducts().then(function(response){
+              $scope.newPackages = response
+          })
+        }
+        {%endhighlight%}
+
+the controller calls the productservice's downloadproducts method, to display the new products available to download
+
+4. ProductsService.downloadProducts
+
+        {%highlight javascript%}
+              downloadProducts:function(){
+
+          var defer = $q.defer();
+            checkServer().then(function(response){
+              findCommon(response.data).then(function(alreadyHave){
+                removeDiscontinued(alreadyHave,response.data).then(function(products){
+                  localStorage.setItem("products", JSON.stringify(products));
+                  insertNewProducts(alreadyHave,response.data).then(function(newProducts){
+                    defer.resolve(newProducts)
+                })
+              })
+            })
+          });
+          return defer.promise
+        },
+        {%endhighlight%}
+        
