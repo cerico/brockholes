@@ -100,7 +100,7 @@ products_controller.rb
     
 Some of this should move out into a helper method, but its staying here for the minute! If we're deactivating a product, its straightforward, we just turn it false, nothing else. But if we're activating a product we want to make sure its the only active product with that name, so we check there are no other active products with that name, belonging to the company of the current admin, and if there aren't any, we can turn this product active, and if there are we flash an error 
 
-2 API 
+<h3>2 API </h3>
 
 Now lets look at the API
 
@@ -120,7 +120,7 @@ this now makes the api controller's get_new_products method really simple! All i
     
 Now lets move to the ipad, and have a look at the code there
 
-3 ProductsController.js
+<h3>3 ProductsController.js</h3>
 
         {%highlight javascript%}
         $scope.checkProducts = function(){
@@ -132,7 +132,7 @@ Now lets move to the ipad, and have a look at the code there
 
 the controller calls the productservice's downloadproducts method, to display the new products available to download
 
-4 ProductsService.downloadProducts
+<h3>4 ProductsService.downloadProducts</h3>
 
         {%highlight javascript%}
               downloadProducts:function(){
@@ -154,7 +154,7 @@ the controller calls the productservice's downloadproducts method, to display th
         
 quite a bit going on here with $q, which all happens inside the service, hidden from the controller then returns a fulfilled promise. So first it runs the checkserver function, feeds the response into the findCommon function, feeds the results of oth into the removeDiscontinued funtion, and then again into the insertNewProducts function, which returns the results we want to display, which we can then return to the controller, and therefore the view. Lets look at each in turn
 
-5 checkServer
+<h3>5 checkServer</h3>
 
         {%highlight javascript%}
           function checkServer(){
@@ -165,7 +165,7 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
         
  self-explanatory, hits just hits our rails api to bring back an array of the currently active products, and this is fed into the findCommon function.
  
- 6 findCommon
+<h3> 6 findCommon</h3>
  
          {%highlight javascript%}
                function findCommon(activeProducts){
@@ -187,7 +187,7 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
         
 This creates an empty array called 'alreadyHave', we iterated through both the current products and the active products array we received from the rails server, then push products commong to both into this new array, which we then return, to go into the removeDiscontinued and insertNewProducts functions
 
-7 removeDiscontinued
+<h3>7 removeDiscontinued</h3>
 
         {%highlight javascript%}
               function removeDiscontinued(alreadyHave,activeProducts){
@@ -212,7 +212,7 @@ This creates an empty array called 'alreadyHave', we iterated through both the c
   
  This iterates through our current products and if they are not in our new array, then this means they are discontinued, so they are set to active:false, and will no longer appear in our views. UNLESS its product with id 5, which is a dummy product we are keeping on the app for illustrative purposes
  
- 8 insertNewProducts
+<h3> 8 insertNewProducts</h3>
  
          {%highlight javascript%}
          function insertNewProducts(alreadyHave,activeProducts){
@@ -238,7 +238,7 @@ these are then returned back to our controllers checkProducts function, and henc
       $scope.newPackages = response
       {%endhighlight%}
       
- 9 the view
+<h3> 9 the view</h3>
  
  if we now look in the view, we are returned a list of products we dont have and are currently active and therefor available to download
  
@@ -249,7 +249,7 @@ these are then returned back to our controllers checkProducts function, and henc
                     
  we can filter the active products by a need:true, showing only the ones we dont already have, with an ng-click action on each, lets look at that 
  
- 10 getZip
+<h3> 10 getZip</h3>
  
      {%highlight javascript%}
      $scope.getZip = function(package){
@@ -276,7 +276,7 @@ these are then returned back to our controllers checkProducts function, and henc
     
  Here we have a function, which immediatley turns the syncing icon on, while a potentially large file is downloading, then we call the ProductsService.getZip function, then the ProductsService.addProduct function, and on completion ,the productsservice.getproducts function, lets look at prodctsservice.getZip
  
- 11 ProductsService.getZip
+<h3> 11 ProductsService.getZip</h3>
  
          {%highlight javascript%}
                  getZip: function(package){
@@ -290,7 +290,7 @@ these are then returned back to our controllers checkProducts function, and henc
         
  this calls the filesystem.downloadZip message, passing it an empty string, and the product name of what we would like to download, and passes the result to the controller (and hence the view), when done  
  
- 12 downloadZip
+<h3> 12 downloadZip</h3>
  
          {%highlight javascript%}
                downloadZip: function (package) {
@@ -328,7 +328,7 @@ these are then returned back to our controllers checkProducts function, and henc
             
  Lots going on here, this is the cordova heart , where we set a download location, and then unzip to it, our zip files will come here, into the cordova file structure, each one into a directory with the same name as its zipfile, this means we know exactly where to link to from our view. Once this is complete, we run the PackageService.addProduct function
  
- 13 addProduct
+<h3> 13 addProduct</h3>
  
           {%highlight javascript%}
           addProduct: function(product){
@@ -361,15 +361,19 @@ we set the packageUrl to the cordova.file.dataDirectory, plus the products subdi
               package.need = false
               {%endhighlight%}
               
- which means we can now set stasus's based on object state
+ which means we can now set status's based on object state, so if we head back to the view
  
-     {%highlight html%}
+        {%highlight html%}
+                <ion-item ng-repeat="package in newPackages | filter: {need:true}"
+                    class="item-thumbnail-left" ng-click="getZip(package)">
+ 
+     
                <ion-item ng-repeat="product in products  | filter:{active:true} "
                     class="item-thumbnail-left">
                     {%endhighlight%}
                     
- and now we display all the products with a filter, so we actually just show the active products
- 
+
+ The newPackages array is the array of currently active products received from the server, and the products array is what we have downloaded and ready on the ipad. As the zipfile is downloaded, it gets added to the product array with a status of active, and while it remains in the the newPackages array, its need status is turned to false, so it should only appear once in the view. Pressing the Sync Products button again, shouldn't show anything in the newPackages array unless there has been anotehr change, as each one will have a status of need:false
  
 
     
