@@ -162,7 +162,7 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
         }
         {%endhighlight%}
         
- self-explanatory, hits just hits our rails api to bring back an array of the currently active products, and this is fed into the findCommon function
+ self-explanatory, hits just hits our rails api to bring back an array of the currently active products, and this is fed into the findCommon function.
  
  6. findCommon
  
@@ -188,7 +188,25 @@ This creates an empty array called 'alreadyHave', we iterated through both the c
 
 7 removeDiscontinued
 
+        {%highlight javascript%}
+              function removeDiscontinued(alreadyHave,activeProducts){
 
+          var defer = $q.defer()
+          for (var i = 0;i<products.length;i++){
+
+              if (alreadyHave.indexOf(products[i].id) == -1){
+                products[i].id == 5 ? products[i].active = true : products[i].active = false
+                // above clears out inactive products, unless its product 5 - the super demo
+                //todo - delete the html/css/js in cordova.data.directory?
+
+              }else{
+                }
+
+            defer.resolve(products)
+              }
+          return defer.promise
+          }
+          {%endhighlight%}
           
   
  This iterates through our current products and if they are not in our new array, then this means they are discontinued, so they are set to active:false, and will no longer appear in our views. UNLESS its product with id 5, which is a dummy product we are keeping on the app for illustrative purposes
