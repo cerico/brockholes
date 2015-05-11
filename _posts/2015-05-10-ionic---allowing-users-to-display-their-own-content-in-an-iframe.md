@@ -329,7 +329,7 @@ these are then returned back to our controllers checkProducts function, and henc
  
  13 addProduct
  
-          {%highlight javascript}
+          {%highlight javascript%}
           addProduct: function(product){
           var defer = $q.defer()
 
