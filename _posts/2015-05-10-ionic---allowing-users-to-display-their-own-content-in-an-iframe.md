@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Ionic: Allowing users to display their own content in an iframe - part i: rails"
+title: "Ionic: Allowing users to display their own offline content in an iframe"
 description: ""
 category: 
 tags: [rails, ionic, cordova]
