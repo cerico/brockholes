@@ -184,68 +184,139 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
         }
         {%endhighlight%}
         
-This creates an empty array called 'alreadyHave', we iterated through both the current products and the active products array we received from the rails server, then push products commong to both into this new array, which we then return, to go into the removeDiscontinued and insertNewProducts functions
 
-7 removeDiscontinued
-
-        {%highlight javascript%}
-              function removeDiscontinued(alreadyHave,activeProducts){
-
-          var defer = $q.defer()
-          for (var i = 0;i<products.length;i++){
-
-              if (alreadyHave.indexOf(products[i].id) == -1){
-                products[i].id == 5 ? products[i].active = true : products[i].active = false
-                // above clears out inactive products, unless its product 5 - the super demo
-                //todo - delete the html/css/js in cordova.data.directory?
-
-              }else{
-                }
-
-            defer.resolve(products)
-              }
-          return defer.promise
-          }
-          {%endhighlight%}
-          
-  
- This iterates through our current products and if they are not in our new array, then this means they are discontinued, so they are set to active:false, and will no longer appear in our views. UNLESS its product with id 5, which is a dummy product we are keeping on the app for illustrative purposes
  
- 8. insertNewProducts
+ 10 getZip
+ 
+     {%highlight javascript%}
+     $scope.getZip = function(package){
+        package.syncing = true
+
+      ProductsService.getZip(package.file.url).then(function(data) {
+          ProductsService.addProduct(package).then(function (pack) {
+              package.syncing = false
+              package.downloaded = true
+              package.active = true
+              package.need = false
+              $scope.products.push(package)
+              ProductsService.getProducts().then(function(data){
+                  $scope.products = data
+              });
+              //ProductsService.deleteZip()
+          });
+
+      });
+
+    }
+    {%endhighlight%}
+    
+    
+ Here we have a function, which immediatley turns the syncing icon on, while a potentially large file is downloading, then we call the ProductsService.getZip function, then the ProductsService.addProduct function, and on completion ,the productsservice.getproducts function, lets look at prodctsservice.getZip
+ 
+ 11 ProductsService.getZip
  
          {%highlight javascript%}
-         function insertNewProducts(alreadyHave,activeProducts){
-
-          var defer = $q.defer()
-          for (var i = 0;i <activeProducts.length;i++){
-            if (alreadyHave.indexOf(activeProducts[i].id) == -1){
-              activeProducts[i].need = true
-            }else{
-              activeProducts[i].need = false
-            }
-            defer.resolve(activeProducts)
-          }
+                 getZip: function(package){
+          var defer = $q.defer();
+          downloadZip("",package).then(function(data){
+            defer.resolve(data)
+          });
           return defer.promise
-        }
+        },
         {%endhighlight%}
         
-Finally we iterate through the array of active products from the server, and set them to need:true or false, depending if they appear in our common array, and therefore in our current product list
-
-these are then returned back to our controllers checkProducts function, and hence the view, as 
-
-      {%highlight javascript%}
-      $scope.newPackages = response
-      {%endhighlight%]
-      
- 9. the view
+ this calls the filesystem.downloadZip message, passing it an empty string, and the product name of what we would like to download, and passes the result to the controller (and hence the view), when done  
  
- if we now look in the view, we are returned a list of products we dont have and are currently active and therefor available to download
+ 12. downloadZip
  
-           {%highlight html%}
-           <ion-item ng-repeat="package in newPackages | filter: {need:true}"
-                    class="item-thumbnail-left" ng-click="getZip(package)">
+         {%highlight javascript%}
+               downloadZip: function (package) {
+            var defer = $q.defer();
+            var fileTransfer = new FileTransfer();
+            var uri = encodeURI(server + package);
+            var fileURL = cordova.file.dataDirectory + package;
+
+            fileTransfer.download(
+                uri,
+                fileURL,
+                function(entry) {
+                  console.log("download complete: " + entry.toURL());
+                  zip.unzip(fileURL,
+                      cordova.file.dataDirectory + "products",
+                      function(){
+                        console.log('Zip decompressed successfully');
+                        defer.resolve("done")
+                      }
+                  );
+                },
+                function(error) {
+                  console.log("download error source " + error.source);
+                  console.log("download error target " + error.target);
+                  console.log("upload error code" + error.code);
+                },
+                false,
+                {
+                  headers: {
+                    //"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+                  }
+                }
+            );
+            {%endhighlight%}
+            
+ Lots going on here, this is the cordova heart , where we set a download location, and then unzip to it, our zip files will come here, into the cordova file structure, each one into a directory with the same name as its zipfile, this means we know exactly where to link to from our view. Once this is complete, we run the PackageService.addProduct function
+ 
+ 13 addProduct
+ 
+          {%highlight javascript%}
+          addProduct: function(product){
+          var defer = $q.defer()
+
+          newproduct = {
+          id: product.id,
+              name: product.name.replace(/_/, " ").toLowerCase().capitalize(),
+              packageUrl: cordova.file.dataDirectory + "products/" + product.name + "/index.html",
+              img: 'img/jamesdemo.png',
+              pricePence: 950,
+            active:true
+        },
+
+          products.push(newproduct)
+          localStorage.setItem("products", JSON.stringify(products));
+          defer.resolve(products)
+          return defer.promise
+        },
+        {%endhighlight%}
+        
+Here we create a new product, push it into the current products array, and then add it in localstorage, before returning the products array back to the controller
+
+we set the packageUrl to the cordova.file.dataDirectory, plus the products subdirector we specifed all zips to go in, plus the product.name, and finally index.html, now back in the controller
+
+        {%highlight javascript%}
+              package.syncing = false
+              package.downloaded = true
+              package.active = true
+              package.need = false
+              {%endhighlight%}
+              
+ which means we can now set stasus's based on object state
+ 
+     {%highlight html%}
+               <ion-item ng-repeat="product in products  | filter:{active:true} "
+                    class="item-thumbnail-left">
                     {%endhighlight%}
                     
- we can filter the active products by a need:true, showing only the ones we dont already have, with an ng-click action on each, lets look at that 
+ and now we display all the products with a filter, so we actually just show the active products
  
  
+
+    
+ 
+ 
+
+
+
+
+
+
+
+
