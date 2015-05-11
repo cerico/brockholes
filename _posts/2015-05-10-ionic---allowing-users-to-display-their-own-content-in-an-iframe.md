@@ -151,3 +151,90 @@ the controller calls the productservice's downloadproducts method, to display th
         },
         {%endhighlight%}
         
+quite a bit going on here with $q, which all happens inside the service, hidden from the controller then returns a fulfilled promise. So first it runs the checkserver function, feeds the response into the findCommon function, feeds the results of oth into the removeDiscontinued funtion, and then again into the insertNewProducts function, which returns the results we want to display, which we can then return to the controller, and therefore the view. Lets look at each in turn
+
+5. checkServer
+
+    {%highlight javascript%}
+          function checkServer(){
+          return $http.post($auth.apiUrl() + '/api/v1/products/get_new_products').success(function(response) {
+        })
+        }
+        {%endhighlight%}
+        
+ self-explanatory, hits just hits our rails api to bring back an array of the currently active products, and this is fed into the findCommon function
+ 
+ 6. findCommon
+ 
+         {%highlight javascript%}
+               function findCommon(activeProducts){
+          var products = localStorage.getItem("products");//Retrieve the stored data
+          products = JSON.parse(products); //Converts string to object
+            var defer = $q.defer()
+            var alreadyHave = [];
+            for (var i=0; i < products.length; i++) {
+              for (var j=0; j < activeProducts.length; j++) {
+                if (products[i].id === activeProducts[j].id ) {
+                  alreadyHave.push(products[i].id);
+                }
+              }
+              defer.resolve(alreadyHave)
+            }
+        return defer.promise
+        }
+        {%endhighlight%}
+        
+This creates an empty array called 'alreadyHave', we iterated through both the current products and the active products array we received from the rails server, then push products commong to both into this new array, which we then return, to go into the removeDiscontinued and insertNewProducts functions
+
+7 removeDiscontinued
+
+        {%highlight javascript%}
+              function removeDiscontinued(alreadyHave,activeProducts){
+
+          var defer = $q.defer()
+          for (var i = 0;i<products.length;i++){
+
+              if (alreadyHave.indexOf(products[i].id) == -1){
+                products[i].id == 5 ? products[i].active = true : products[i].active = false
+                // above clears out inactive products, unless its product 5 - the super demo
+                //todo - delete the html/css/js in cordova.data.directory?
+
+              }else{
+                }
+
+            defer.resolve(products)
+              }
+          return defer.promise
+          }
+          {%endhighlight%}
+          
+  
+ This iterates through our current products and if they are not in our new array, then this means they are discontinued, so they are set to active:false, and will no longer appear in our views. UNLESS its product with id 5, which is a dummy product we are keeping on the app for illustrative purposes
+ 
+ 8. insertNewProducts
+ 
+         {%highlight javascript%}
+         function insertNewProducts(alreadyHave,activeProducts){
+
+          var defer = $q.defer()
+          for (var i = 0;i <activeProducts.length;i++){
+            if (alreadyHave.indexOf(activeProducts[i].id) == -1){
+              activeProducts[i].need = true
+            }else{
+              activeProducts[i].need = false
+            }
+            defer.resolve(activeProducts)
+          }
+          return defer.promise
+        }
+        {%endhighlight%}
+        
+Finally we iterate through the array of active products from the server, and set them to need:true or false, depending if they appear in our common array, and therefore in our current product list
+
+these are then returned back to our controllers checkProducts function, and hence the view, as 
+
+      {%highlight javascript%}
+      $scope.newPackages = response
+      {%endhighlight%]
+      
+ 
