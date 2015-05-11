@@ -8,7 +8,7 @@ tags: [rails, ionic, cordova]
 
 Our task today is something of a complex multi-faceted one. The app i'm working on at the moment has to have the ability to display 3rd party content in an iframe, and it must be able to do it offline. Our customers have to be able to upload a zipfile of a site to the rails server, and their ipad users must be able to download that zipfile, and be able to display it while offline, and they must be able to download and display multiple apps/products in the iframe.
 
-1. Rails
+1 Rails
 
 Lets start at the rails end, the customer has to be able to upload a zipfile of their product/application, the html, the css, the js, and any associated photos or videos. We also have to allow for the fact they may want to update existing products. I decided the best way to manage this was to allow a customer to has_many products, and to mark them as either active or inactive, and that only active products would be returned to the ipad via the API. I decided to derive the name of the product at the ionic end from the name of the zipfile. This presented a challenge, how to prevent the customer from mulitple uploads with the zipfile named the same.
 
@@ -99,7 +99,7 @@ products_controller.rb
     
 Some of this should move out into a helper method, but its staying here for the minute! If we're deactivating a product, its straightforward, we just turn it false, nothing else. But if we're activating a product we want to make sure its the only active product with that name, so we check there are no other active products with that name, belonging to the company of the current admin, and if there aren't any, we can turn this product active, and if there are we flash an error 
 
-2. API 
+2 API 
 
 Now lets look at the API
 
@@ -119,7 +119,7 @@ this now makes the api controller's get_new_products method really simple! All i
     
 Now lets move to the ipad, and have a look at the code there
 
-3. ProductsController.js
+3 ProductsController.js
 
         {%highlight javascript%}
         $scope.checkProducts = function(){
@@ -131,7 +131,7 @@ Now lets move to the ipad, and have a look at the code there
 
 the controller calls the productservice's downloadproducts method, to display the new products available to download
 
-4. ProductsService.downloadProducts
+4 ProductsService.downloadProducts
 
         {%highlight javascript%}
               downloadProducts:function(){
@@ -153,7 +153,7 @@ the controller calls the productservice's downloadproducts method, to display th
         
 quite a bit going on here with $q, which all happens inside the service, hidden from the controller then returns a fulfilled promise. So first it runs the checkserver function, feeds the response into the findCommon function, feeds the results of oth into the removeDiscontinued funtion, and then again into the insertNewProducts function, which returns the results we want to display, which we can then return to the controller, and therefore the view. Lets look at each in turn
 
-5. checkServer
+5 checkServer
 
         {%highlight javascript%}
           function checkServer(){
@@ -164,7 +164,7 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
         
  self-explanatory, hits just hits our rails api to bring back an array of the currently active products, and this is fed into the findCommon function.
  
- 6. findCommon
+ 6 findCommon
  
          {%highlight javascript%}
                function findCommon(activeProducts){
@@ -211,7 +211,7 @@ This creates an empty array called 'alreadyHave', we iterated through both the c
   
  This iterates through our current products and if they are not in our new array, then this means they are discontinued, so they are set to active:false, and will no longer appear in our views. UNLESS its product with id 5, which is a dummy product we are keeping on the app for illustrative purposes
  
- 8. insertNewProducts
+ 8 insertNewProducts
  
          {%highlight javascript%}
          function insertNewProducts(alreadyHave,activeProducts){
@@ -237,7 +237,7 @@ these are then returned back to our controllers checkProducts function, and henc
       $scope.newPackages = response
       {%endhighlight%}
       
- 9. the view
+ 9 the view
  
  if we now look in the view, we are returned a list of products we dont have and are currently active and therefor available to download
  
@@ -289,7 +289,7 @@ these are then returned back to our controllers checkProducts function, and henc
         
  this calls the filesystem.downloadZip message, passing it an empty string, and the product name of what we would like to download, and passes the result to the controller (and hence the view), when done  
  
- 12. downloadZip
+ 12 downloadZip
  
          {%highlight javascript%}
                downloadZip: function (package) {
