@@ -347,7 +347,7 @@ these are then returned back to our controllers checkProducts function, and henc
           defer.resolve(products)
           return defer.promise
         },
-        %{endhighlight%}
+        {%endhighlight%}
         
 Here we create a new product, push it into the current products array, and then add it in localstorage, before returning the products array back to the controller
 
