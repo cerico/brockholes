@@ -155,7 +155,7 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
 
 5. checkServer
 
-    {%highlight javascript%}
+        {%highlight javascript%}
           function checkServer(){
           return $http.post($auth.apiUrl() + '/api/v1/products/get_new_products').success(function(response) {
         })
