@@ -155,29 +155,18 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
 
 5. checkServer
 
-
+    {%highlight javascript%}
+          function checkServer(){
+          return $http.post($auth.apiUrl() + '/api/v1/products/get_new_products').success(function(response) {
+        })
+        }
+        {%endhighlight%}
         
  self-explanatory, hits just hits our rails api to bring back an array of the currently active products, and this is fed into the findCommon function
  
  6. findCommon
  
-         {%highlight javascript%}
-               function findCommon(activeProducts){
-          var products = localStorage.getItem("products");//Retrieve the stored data
-          products = JSON.parse(products); //Converts string to object
-            var defer = $q.defer()
-            var alreadyHave = [];
-            for (var i=0; i < products.length; i++) {
-              for (var j=0; j < activeProducts.length; j++) {
-                if (products[i].id === activeProducts[j].id ) {
-                  alreadyHave.push(products[i].id);
-                }
-              }
-              defer.resolve(alreadyHave)
-            }
-        return defer.promise
-        }
-        {%endhighlight%}
+
         
 This creates an empty array called 'alreadyHave', we iterated through both the current products and the active products array we received from the rails server, then push products commong to both into this new array, which we then return, to go into the removeDiscontinued and insertNewProducts functions
 
