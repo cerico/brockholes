@@ -4,6 +4,7 @@ title: "Ionic: Allowing users to display their own offline content in an iframe"
 description: ""
 category: 
 tags: [rails, ionic, cordova]
+summary: The app i'm working on at the moment has to have the ability to display 3rd party content in an iframe, and it must be able to do it offline. Our customers have to be able to upload a zipfile of a site to the rails server, and their ipad users must be able to download that zipfile, and be able to display it while offline, and they must be able to download and display multiple apps/products in the iframe.
 ---
 
 Our task today is something of a complex multi-faceted one. The app i'm working on at the moment has to have the ability to display 3rd party content in an iframe, and it must be able to do it offline. Our customers have to be able to upload a zipfile of a site to the rails server, and their ipad users must be able to download that zipfile, and be able to display it while offline, and they must be able to download and display multiple apps/products in the iframe.
