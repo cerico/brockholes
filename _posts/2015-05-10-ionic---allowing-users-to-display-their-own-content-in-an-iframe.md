@@ -4,10 +4,17 @@ title: "Ionic: Allowing users to display their own offline content in an iframe"
 description: ""
 category: 
 tags: [rails, ionic, cordova]
-summary: The app i'm working on at the moment has to have the ability to display 3rd party content in an iframe, and it must be able to do it offline. Our customers have to be able to upload a zipfile of a site to the rails server, and their ipad users must be able to download that zipfile, and be able to display it while offline, and they must be able to download and display multiple apps/products in the iframe.
+summary: The app I'm working on at the moment has to have the ability to download 3rd party content, and then display it in an iframe, and it must be able to do this offline.
 ---
 
-Our task today is something of a complex multi-faceted one. The app i'm working on at the moment has to have the ability to display 3rd party content in an iframe, and it must be able to do it offline. Our customers have to be able to upload a zipfile of a site to the rails server, and their ipad users must be able to download that zipfile, and be able to display it while offline, and they must be able to download and display multiple apps/products in the iframe.
+The app I'm working on at the moment has to have the ability to download 3rd party content, and then display it in an iframe, and it must be able to do this offline. Our customers have to be able to upload a zipfile, of a site they want to display to the rails server, and their ipad users must be notified a new site has arrived and download it, and it must then be able to display it while offline.
+
+<h3>Overview</h3>
+
+We're going to allow customers to upload multiple sites to the rails server, each site they upload will be marked inactive on upload, and while name duplication is allowed on inactive products, each active product must be uniquely identified. The product name will be derived from the zipfile, so a naming convention is enforced, lower case with underscores between each word. 
+
+When the client ipad app connects, it will receive a list of currently active products, and will immediately remove from the view, any products it has that arent on this list, it will then show in the view any currently active products it doesnt have, these will contain links to zipfiles containing the actual site, clicking the link will download the zip file and then extract it onto cordovas file system, we'll then delete the zips themselves. Whenever an update of currently active products occurs, newly inactive products will disappear from view, and the directories (html,css,js,mp4) it has on the cordova file system will be deleted
+
 
 <h3>1 Rails</h3>
 
@@ -36,7 +43,7 @@ companies/_form.html.erb
     <% end %>
     {%endhighlight%}
 
-straightforward, just a regular upload form
+straightforward, just a regular old upload form
 
 companies_controller.rb
 
@@ -123,20 +130,21 @@ Now lets move to the ipad, and have a look at the code there
 <h3>3 ProductsController.js</h3>
 
         {%highlight javascript%}
+        //js/controllers/productsController.js
         $scope.checkProducts = function(){
-          ProductsService.downloadProducts().then(function(response){
+          ProductsFactory.downloadProducts().then(function(response){
               $scope.newPackages = response
           })
         }
         {%endhighlight%}
 
-the controller calls the productservice's downloadproducts method, to display the new products available to download
+the controller calls the productservice's downloadProducts method, to display the new products available to download
 
 <h3>4 ProductsService.downloadProducts</h3>
 
         {%highlight javascript%}
-              downloadProducts:function(){
-
+        //js/factories/productsFactory.js
+          downloadProducts:function(){
           var defer = $q.defer();
             checkServer().then(function(response){
               findCommon(response.data).then(function(alreadyHave){
@@ -152,11 +160,12 @@ the controller calls the productservice's downloadproducts method, to display th
         },
         {%endhighlight%}
         
-quite a bit going on here with $q, which all happens inside the service, hidden from the controller then returns a fulfilled promise. So first it runs the checkserver function, feeds the response into the findCommon function, feeds the results of oth into the removeDiscontinued funtion, and then again into the insertNewProducts function, which returns the results we want to display, which we can then return to the controller, and therefore the view. Lets look at each in turn
+quite a bit going on here with $q, which all happens inside the factory, hidden from the controller then returns a fulfilled promise. So first it runs the checkserver function, feeds the response into the findCommon function, feeds the results of both into the removeDiscontinued function, and then again into the insertNewProducts function, which returns the results we want to display, which we can then return to the controller, and therefore the view. Lets look at each in turn
 
 <h3>5 checkServer</h3>
 
         {%highlight javascript%}
+          //js/factories/productsFactory.js
           function checkServer(){
           return $http.post($auth.apiUrl() + '/api/v1/products/get_new_products').success(function(response) {
         })
@@ -168,14 +177,15 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
 <h3> 6 findCommon</h3>
  
          {%highlight javascript%}
-               function findCommon(activeProducts){
+         //js/factories/productsFactory.js
+          function findCommon(activeProducts){
           var products = localStorage.getItem("products");//Retrieve the stored data
           products = JSON.parse(products); //Converts string to object
             var defer = $q.defer()
             var alreadyHave = [];
             for (var i=0; i < products.length; i++) {
               for (var j=0; j < activeProducts.length; j++) {
-                if (products[i].id === activeProducts[j].id ) {
+                if (products[i].id === activeProducts[j].id && products[i].active == true  ) {
                   alreadyHave.push(products[i].id);
                 }
               }
@@ -185,11 +195,12 @@ quite a bit going on here with $q, which all happens inside the service, hidden 
         }
         {%endhighlight%}
         
-This creates an empty array called 'alreadyHave', we iterated through both the current products and the active products array we received from the rails server, then push products commong to both into this new array, which we then return, to go into the removeDiscontinued and insertNewProducts functions
+This creates an empty array called 'alreadyHave', we then iterate through both the current products and the active products array we received from the rails server, then push products common to both, and active, into this new array, which we then return, to go into the removeDiscontinued and insertNewProducts functions
 
 <h3>7 removeDiscontinued</h3>
 
         {%highlight javascript%}
+        //js/factories/productsFactory.js
               function removeDiscontinued(alreadyHave,activeProducts){
 
           var defer = $q.defer()
@@ -198,7 +209,7 @@ This creates an empty array called 'alreadyHave', we iterated through both the c
               if (alreadyHave.indexOf(products[i].id) == -1){
                 products[i].id == 5 ? products[i].active = true : products[i].active = false
                 // above clears out inactive products, unless its product 5 - the super demo
-                //todo - delete the html/css/js in cordova.data.directory?
+              deleteAssets(products[i].name)
 
               }else{
                 }
@@ -210,11 +221,13 @@ This creates an empty array called 'alreadyHave', we iterated through both the c
           {%endhighlight%}
           
   
- This iterates through our current products and if they are not in our new array, then this means they are discontinued, so they are set to active:false, and will no longer appear in our views. UNLESS its product with id 5, which is a dummy product we are keeping on the app for illustrative purposes
+ This iterates through our current products and if they are not in our new array, then this means they are discontinued, so they are set to active:false, and will no longer appear in our views. UNLESS its product with id 5, which is a dummy product we are keeping on the app for illustrative purposes. Once a product has been turned false, or discontinued, we can delete its assets, we'll come onto that in part 14
  
+  
 <h3> 8 insertNewProducts</h3>
  
          {%highlight javascript%}
+         //js/factories/productsFactory.js
          function insertNewProducts(alreadyHave,activeProducts){
 
           var defer = $q.defer()
@@ -235,6 +248,7 @@ Finally we iterate through the array of active products from the server, and set
 these are then returned back to our controllers checkProducts function, and hence the view, as 
 
       {%highlight javascript%}
+      //js/controllers/productsController.js
       $scope.newPackages = response
       {%endhighlight%}
       
@@ -243,42 +257,46 @@ these are then returned back to our controllers checkProducts function, and henc
  if we now look in the view, we are returned a list of products we dont have and are currently active and therefor available to download
  
            {%highlight html%}
-           <ion-item ng-repeat="package in newPackages | filter: {need:true}"
-                    class="item-thumbnail-left" ng-click="getZip(package)">
-                    {%endhighlight%}
+           //templates/products.html
+            <ion-item ng-repeat="package in newPackages | filter: {need:true}"
+           <div class="item-icon-right super-icon" ng-click="getZip(package)">
+          <h2 ng-show="(newPackages|filter: {need:true}).length > 0" class="sales-history-header"> New Products</h2>
+          <ion-item ng-repeat="product in products  | filter:{active:true} "
+                    class="item-thumbnail-left thumb-left-super item-content-special">
+                    {%endhighlight%} 
                     
- we can filter the active products by a need:true, showing only the ones we dont already have, with an ng-click action on each, lets look at that 
+ we can filter the active products by a need:true, showing only the ones we dont already have, with an ng-click action on each, and then the products we do already have, filtered by an active::true, but first lets look at the ng-click
  
 <h3> 10 getZip</h3>
  
      {%highlight javascript%}
+           //js/controllers/productsController.js
      $scope.getZip = function(package){
         package.syncing = true
 
-      ProductsService.getZip(package.file.url).then(function(data) {
-          ProductsService.addProduct(package).then(function (pack) {
+      ProductsFactory.getZip(package.file.url).then(function(data) {
+          ProductsFactory.addProduct(package).then(function (pack) {
               package.syncing = false
               package.downloaded = true
               package.active = true
               package.need = false
               $scope.products.push(package)
-              ProductsService.getProducts().then(function(data){
+              ProductsFactory.getProducts().then(function(data){
                   $scope.products = data
               });
-              //ProductsService.deleteZip()
+              //ProductsFactory.deleteZip()
           });
-
       });
-
     }
     {%endhighlight%}
     
     
- Here we have a function, which immediatley turns the syncing icon on, while a potentially large file is downloading, then we call the ProductsService.getZip function, then the ProductsService.addProduct function, and on completion ,the productsservice.getproducts function, lets look at prodctsservice.getZip
+ Here we have a function, which immediately turns the syncing icon on, while a potentially large file is downloading, then we call the ProductsFactory.getZip function, then the ProductsFactory.addProduct function, and on completion ,the productsFactory.getProducts function, lets look at prodctsFactory.getZip
  
-<h3> 11 ProductsService.getZip</h3>
+<h3> 11 ProductsFactory.getZip</h3>
  
          {%highlight javascript%}
+               //js/factories/productsFactory.js
                  getZip: function(package){
           var defer = $q.defer();
           downloadZip("",package).then(function(data){
@@ -293,11 +311,14 @@ these are then returned back to our controllers checkProducts function, and henc
 <h3> 12 downloadZip</h3>
  
          {%highlight javascript%}
-               downloadZip: function (package) {
+                        //js/factories/productsFactory.js
+                  downloadZip: function (server,package) {
+            console.log(package)
             var defer = $q.defer();
             var fileTransfer = new FileTransfer();
             var uri = encodeURI(server + package);
             var fileURL = cordova.file.dataDirectory + package;
+            console.log(fileURL)
 
             fileTransfer.download(
                 uri,
@@ -308,6 +329,12 @@ these are then returned back to our controllers checkProducts function, and henc
                       cordova.file.dataDirectory + "products",
                       function(){
                         console.log('Zip decompressed successfully');
+                        console.log(fileURL)
+                        console.log(entry)
+                        entry.remove(function(entry){
+                          console.log("file successfully removed");
+                          console.log(entry)
+                        });
                         defer.resolve("done")
                       }
                   );
@@ -320,17 +347,21 @@ these are then returned back to our controllers checkProducts function, and henc
                 false,
                 {
                   headers: {
-                    //"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+                    //"Authorization": "soirgoiweghioweg"
                   }
                 }
             );
+            return defer.promise
+          }
+
             {%endhighlight%}
             
- Lots going on here, this is the cordova heart , where we set a download location, and then unzip to it, our zip files will come here, into the cordova file structure, each one into a directory with the same name as its zipfile, this means we know exactly where to link to from our view. Once this is complete, we run the PackageService.addProduct function
+ Lots going on here, this is the cordova heart , where we set a download location, and then unzip to it, our zip files will come here, into the cordova file structure, each one into a directory with the same name as its zipfile, this means we know exactly where to link to from our view. Then we deleted the zipfile. Once all this is complete, we run the PackageService.addProduct function
  
 <h3> 13 addProduct</h3>
  
           {%highlight javascript%}
+                         //js/factories/productsFactory.js
           addProduct: function(product){
           var defer = $q.defer()
 
@@ -338,8 +369,7 @@ these are then returned back to our controllers checkProducts function, and henc
           id: product.id,
               name: product.name.replace(/_/, " ").toLowerCase().capitalize(),
               packageUrl: cordova.file.dataDirectory + "products/" + product.name + "/index.html",
-              img: 'img/jamesdemo.png',
-              pricePence: 950,
+              img: cordova.file.dataDirectory + "products/" + product.name + "/logo.png",
             active:true
         },
 
@@ -352,9 +382,10 @@ these are then returned back to our controllers checkProducts function, and henc
         
 Here we create a new product, push it into the current products array, and then add it in localstorage, before returning the products array back to the controller
 
-we set the packageUrl to the cordova.file.dataDirectory, plus the products subdirector we specifed all zips to go in, plus the product.name, and finally index.html, now back in the controller
+we set the packageUrl to the cordova.file.dataDirectory, plus the products subdirectory we specifed all zips to go in, plus the product.name, and finally index.html, now back in the controller
 
         {%highlight javascript%}
+                //js/controllers/productsController.js
               package.syncing = false
               package.downloaded = true
               package.active = true
@@ -363,19 +394,79 @@ we set the packageUrl to the cordova.file.dataDirectory, plus the products subdi
               
  which means we can now set status's based on object state, so if we head back to the view
  
-        {%highlight html%}
-                <ion-item ng-repeat="package in newPackages | filter: {need:true}"
-                    class="item-thumbnail-left" ng-click="getZip(package)">
- 
-     
-               <ion-item ng-repeat="product in products  | filter:{active:true} "
-                    class="item-thumbnail-left">
-                    {%endhighlight%}
+           {%highlight html%}
+           //templates/products.html
+            <ion-item ng-repeat="package in newPackages | filter: {need:true}"
+           <div class="item-icon-right super-icon" ng-click="getZip(package)">
+          <h2 ng-show="(newPackages|filter: {need:true}).length > 0" class="sales-history-header"> New Products</h2>
+          <ion-item ng-repeat="product in products  | filter:{active:true} "
+                    class="item-thumbnail-left thumb-left-super item-content-special">
+                    {%endhighlight%} 
+                    
+We can filter based on both the need status(of the active list), and the active status (of the current list)
+   
                     
 
- The newPackages array is the array of currently active products received from the server, and the products array is what we have downloaded and ready on the ipad. As the zipfile is downloaded, it gets added to the product array with a status of active, and while it remains in the the newPackages array, its need status is turned to false, so it should only appear once in the view. Pressing the Sync Products button again, shouldn't show anything in the newPackages array unless there has been anotehr change, as each one will have a status of need:false
+<h3> 14 Deleting Assets</h3>
  
+ 
+When we deactivate a product and turn its status false, we can then delete its assets from the cordova file directory, the html,the css,the js, images and videos. We do this partly to save space on the ipad, but also, because a new product with the same name may one day appear, and it will need to be unzipped into an empty directory, not one already populated with its predecessors assets
 
+
+    {%highlight javascript%}
+       //js/factories/productsFactory.js
+           function deleteAssets(product){
+          var defer = $q.defer()
+          filesystem.getFileSystem(product).then(function(data) {
+          defer.resolve("deleted")
+          })
+          return defer.promise
+        }
+        {%endhighlight%}
+       
+      
+ First we run the getFileSystem function  to find the directory on the cordova file directory, and then we can go ahead and delete it
+ 
+<h3>15 filesystem.getFileSystem</h3>
+
+
+            {%highlight javascript%}
+            //js/factories/productsFactory.js
+                      getFileSystem: function (product) {
+            var defer = $q.defer();
+            var regexProduct = product.replace(" ","_").toLowerCase()
+            var fileSystem = function(fileSystem) {
+              fileSystem.root.getDirectory("/NoCloud/products", {create: true}, gotDir);
+            }
+            var gotDir = function(dirEntry){
+              var directoryReader = dirEntry.createReader();
+              directoryReader.readEntries(findADir);
+       
+            }
+            var findADir = function(entries) {
+              for (var i = 0; i < entries.length; i++) {
+                if (entries[i] == regexProduct) {
+                  entries[i] = dirToDelete
+                  dirToDelete.removeRecursively(function(entry) {
+                    console.log("Remove Recursively Succeeded");
+                    console.log(entry + " deleted")
+                  })
+                }
+              }
+            };
+            var fail = function (error) {
+              console.log(error)
+            };
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, fileSystem, fail);
+            return defer.promise
+          },
+          {%endhighlight%}
+          
+
+Firstly we have to undo the regex we did to derive the product name, in order to find the products data directory, which will be lower case with each word separated by an underscore. Then we'll get the NoCloud/products directory, which is where all our products are stored, and feed this to the gotDir function, which we can then create a directoryReader on, so that we can then feed that to our iterating function (findADir). Then we can find out if any of the entries have the same name as our re-regexed product name. If so we mark this as dirToDelete, and then we can delete it recursively
+
+ 
+ 
     
  
  
