@@ -432,39 +432,29 @@ When we deactivate a product and turn its status false, we can then delete its a
 
             {%highlight javascript%}
             //js/factories/productsFactory.js
-                      getFileSystem: function (product) {
+     getFileSystem: function (product) {
             var defer = $q.defer();
-            var regexProduct = product.replace(" ","_").toLowerCase()
+            var regexProduct = product.name.replace(" ","_").toLowerCase()
             var fileSystem = function(fileSystem) {
-              fileSystem.root.getDirectory("/NoCloud/products", {create: true}, gotDir);
+              var proddir = cordova.file.dataDirectory + "products/";
+              window.resolveLocalFileSystemURL(proddir, function(dirEntry) {
+                dirEntry.createReader().readEntries(function(entries) {
+                  for (var i = 0 ; i < entries.length ; i++){
+                    if (entries[i].name ==  regexProduct){
+                      dirToDelete = entries[i]
+                      dirToDelete.removeRecursively(function(entry) {
+                        console.log("Remove Recursively Succeeded");
+                        console.log(entry + " deleted")
+                      })
+                    }
+                  }
+                });
+              })
             }
-            var gotDir = function(dirEntry){
-              var directoryReader = dirEntry.createReader();
-              directoryReader.readEntries(findADir);
-       
-            }
-            var findADir = function(entries) {
-              for (var i = 0; i < entries.length; i++) {
-                if (entries[i] == regexProduct) {
-                  entries[i] = dirToDelete
-                  dirToDelete.removeRecursively(function(entry) {
-                    console.log("Remove Recursively Succeeded");
-                    console.log(entry + " deleted")
-                  })
-                }
-              }
-            };
-            var fail = function (error) {
-              console.log(error)
-            };
-            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, fileSystem, fail);
-            return defer.promise
-          },
           {%endhighlight%}
           
 
-Firstly we have to undo the regex we did to derive the product name, in order to find the products data directory, which will be lower case with each word separated by an underscore. Then we'll get the NoCloud/products directory, which is where all our products are stored, and feed this to the gotDir function, which we can then create a directoryReader on, so that we can then feed that to our iterating function (findADir). Then we can find out if any of the entries have the same name as our re-regexed product name. If so we mark this as dirToDelete, and then we can delete it recursively
-
+Firstly we have to undo the regex we did to derive the product name, in order to find the products data directory, which will be lower case with each word separated by an underscore. Then we'll get the NoCloud/products directory, which is where all our products are stored, which we can then create a directoryReader on, so that we can then iterate through, when we find the correct directory to delete, we can deleted recursively
  
  
     
